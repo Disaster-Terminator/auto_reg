@@ -69,6 +69,9 @@ export default function Dashboard() {
 
   return (
     <div style={{ padding: 0 }}>
+      <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <img src="/20260506-155314.gif" alt="demo" style={{ maxWidth: '100%', borderRadius: 8 }} />
+      </div>
       <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 'bold', margin: 0 }}>仪表盘</h1>
