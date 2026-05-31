@@ -9,11 +9,12 @@ Grok (x.ai) 自动注册
 5. 提取 sso / sso-rw cookie
 """
 import ctypes
-import os
 import random
 import string
 import time
 from typing import Callable, Optional, Tuple
+
+from core.browser_environment import should_launch_headless
 
 
 UA = (
@@ -54,9 +55,8 @@ class GrokRegister:
         from patchright.sync_api import sync_playwright
 
         playwright = sync_playwright().start()
-        has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
         launch_kwargs = {
-            "headless": self.headless or not has_display,
+            "headless": should_launch_headless("headed", requested_headless=self.headless),
             "channel": "msedge",
         }
         if self.proxy:

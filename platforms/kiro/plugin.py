@@ -1,6 +1,5 @@
 """Kiro 平台插件 - 基于 AWS Builder ID 注册"""
-import os
-
+from core.browser_environment import has_graphical_display, should_launch_headless
 from core.base_platform import BasePlatform, Account, AccountStatus, RegisterConfig
 from core.base_mailbox import BaseMailbox
 from core.registry import register
@@ -23,8 +22,8 @@ class KiroPlatform(BasePlatform):
         laoudo_account_id = self.config.extra.get("laoudo_account_id", "")
         log_fn = getattr(self, '_log_fn', print)
 
-        has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
-        headless = self.config.executor_type == "headless" or not has_display
+        has_display = has_graphical_display()
+        headless = should_launch_headless(self.config.executor_type)
         if not has_display and self.config.executor_type == "headed":
             log_fn("容器未检测到 DISPLAY/WAYLAND_DISPLAY，Kiro 自动切换为 headless")
 
