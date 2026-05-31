@@ -9,6 +9,7 @@ Grok (x.ai) 自动注册
 5. 提取 sso / sso-rw cookie
 """
 import ctypes
+import os
 import random
 import string
 import time
@@ -30,11 +31,12 @@ def _rand_password(n: int = 12) -> str:
 
 
 class GrokRegister:
-    def __init__(self, captcha_solver=None, yescaptcha_key: str = "", proxy=None, log_fn=print):
+    def __init__(self, captcha_solver=None, yescaptcha_key: str = "", proxy=None, log_fn=print, headless: bool = False):
         self.captcha_solver = captcha_solver
         self.key = yescaptcha_key
         self.proxy = proxy
         self.log = log_fn
+        self.headless = bool(headless)
 
     def _wait_until(self, fn: Callable[[], bool], timeout: float = 30.0, interval: float = 0.5, desc: str = ""):
         start = time.time()
@@ -52,8 +54,9 @@ class GrokRegister:
         from patchright.sync_api import sync_playwright
 
         playwright = sync_playwright().start()
+        has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
         launch_kwargs = {
-            "headless": False,
+            "headless": self.headless or not has_display,
             "channel": "msedge",
         }
         if self.proxy:

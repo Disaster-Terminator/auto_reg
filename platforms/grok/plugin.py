@@ -1,4 +1,6 @@
 """Grok (x.ai) 平台插件"""
+import os
+
 from core.base_platform import BasePlatform, Account, AccountStatus, RegisterConfig
 from core.base_mailbox import BaseMailbox
 from core.registry import register
@@ -22,7 +24,17 @@ class GrokPlatform(BasePlatform):
         # 优先从任务配置读取，兜底从全局配置读取
         yescaptcha_key = self.config.extra.get("yescaptcha_key") or config_store.get("yescaptcha_key", "")
         captcha_solver = self._make_captcha(key=yescaptcha_key)
-        reg = GrokRegister(captcha_solver=captcha_solver, yescaptcha_key=yescaptcha_key, proxy=self.config.proxy, log_fn=log)
+        has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
+        headless = self.config.executor_type == "headless" or not has_display
+        if not has_display and self.config.executor_type == "headed":
+            log("容器未检测到 DISPLAY/WAYLAND_DISPLAY，Grok 自动切换为 headless")
+        reg = GrokRegister(
+            captcha_solver=captcha_solver,
+            yescaptcha_key=yescaptcha_key,
+            proxy=self.config.proxy,
+            log_fn=log,
+            headless=headless,
+        )
         mailbox_attempts = 1 if email else int(self.config.extra.get("grok_mailbox_attempts", 8))
         otp_timeout = self.get_mailbox_otp_timeout()
         last_error = None

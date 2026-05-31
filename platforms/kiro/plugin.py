@@ -1,4 +1,6 @@
 """Kiro 平台插件 - 基于 AWS Builder ID 注册"""
+import os
+
 from core.base_platform import BasePlatform, Account, AccountStatus, RegisterConfig
 from core.base_mailbox import BaseMailbox
 from core.registry import register
@@ -19,9 +21,14 @@ class KiroPlatform(BasePlatform):
 
         proxy = self.config.proxy
         laoudo_account_id = self.config.extra.get("laoudo_account_id", "")
-
-        reg = KiroRegister(proxy=proxy, tag="KIRO")
         log_fn = getattr(self, '_log_fn', print)
+
+        has_display = bool(os.getenv("DISPLAY") or os.getenv("WAYLAND_DISPLAY"))
+        headless = self.config.executor_type == "headless" or not has_display
+        if not has_display and self.config.executor_type == "headed":
+            log_fn("容器未检测到 DISPLAY/WAYLAND_DISPLAY，Kiro 自动切换为 headless")
+
+        reg = KiroRegister(proxy=proxy, tag="KIRO", headless=headless)
         reg.log = lambda msg: log_fn(msg)
 
         otp_timeout = int(self.config.extra.get("otp_timeout", 120))
