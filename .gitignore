@@ -16,6 +16,7 @@ build/
 # 日志
 logs/
 *.log
+*.pid
 
 # 账号数据
 accounts.txt
@@ -52,6 +53,7 @@ data/
 *.swp
 .claude/
 .docs/superpowers/
+.codex-review/camoufox-download/
 CLAUDE.md
 .ace-tool/
 smstome*_numbers.txt
