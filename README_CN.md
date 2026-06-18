@@ -215,7 +215,11 @@ PROXY_URL=http://username:password@ip:port
 # 邮箱服务（根据需要配置）
 MOEMAIL_API_KEY=your_api_key
 SKYMAIL_API_KEY=your_api_key
+SKYMAIL_TOKEN=your_api_token
 SKYMAIL_DOMAIN=your_domain
+SKYMAIL_API_BASE=https://cloudmail.example.com
+SKYMAIL_CF_ACCESS_CLIENT_ID=optional_cloudflare_access_client_id
+SKYMAIL_CF_ACCESS_CLIENT_SECRET=optional_cloudflare_access_client_secret
 ```
 
 ### 邮箱服务
