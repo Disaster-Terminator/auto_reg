@@ -26,6 +26,8 @@ CONFIG_KEYS = [
     "skymail_api_base",
     "skymail_token",
     "skymail_domain",
+    "skymail_cf_access_client_id",
+    "skymail_cf_access_client_secret",
     "mail_provider",
     "maliapi_base_url",
     "maliapi_api_key",

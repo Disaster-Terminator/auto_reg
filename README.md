@@ -213,7 +213,11 @@ PROXY_URL=http://username:password@ip:port
 # Email Services (Configure based on your needs)
 MOEMAIL_API_KEY=your_api_key
 SKYMAIL_API_KEY=your_api_key
+SKYMAIL_TOKEN=your_api_token
 SKYMAIL_DOMAIN=your_domain
+SKYMAIL_API_BASE=https://cloudmail.example.com
+SKYMAIL_CF_ACCESS_CLIENT_ID=optional_cloudflare_access_client_id
+SKYMAIL_CF_ACCESS_CLIENT_SECRET=optional_cloudflare_access_client_secret
 ```
 
 ### Email Services

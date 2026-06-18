@@ -221,6 +221,8 @@ def create_mailbox(
             api_base=extra.get("skymail_api_base", "https://api.skymail.ink"),
             auth_token=extra.get("skymail_token", ""),
             domain=extra.get("skymail_domain", ""),
+            cf_access_client_id=extra.get("skymail_cf_access_client_id", ""),
+            cf_access_client_secret=extra.get("skymail_cf_access_client_secret", ""),
             proxy=proxy,
         )
     elif provider == "duckmail":
@@ -592,18 +594,32 @@ class TempMailLolMailbox(BaseMailbox):
 class SkyMailMailbox(BaseMailbox):
     """SkyMail / CloudMail 自建邮箱服务"""
 
-    def __init__(self, api_base: str, auth_token: str, domain: str, proxy: str = None):
+    def __init__(
+        self,
+        api_base: str,
+        auth_token: str,
+        domain: str,
+        cf_access_client_id: str = "",
+        cf_access_client_secret: str = "",
+        proxy: str = None,
+    ):
         self.api = (api_base or "").rstrip("/")
         self.auth_token = auth_token or ""
         self.domain = domain or ""
+        self.cf_access_client_id = cf_access_client_id or ""
+        self.cf_access_client_secret = cf_access_client_secret or ""
         self.proxy = build_requests_proxy_config(proxy)
 
     def _headers(self) -> dict:
-        return {
+        headers = {
             "accept": "application/json",
             "content-type": "application/json",
             "authorization": self.auth_token,
         }
+        if self.cf_access_client_id and self.cf_access_client_secret:
+            headers["CF-Access-Client-Id"] = self.cf_access_client_id
+            headers["CF-Access-Client-Secret"] = self.cf_access_client_secret
+        return headers
 
     def _ensure_config(self) -> None:
         if not self.api or not self.auth_token or not self.domain:
