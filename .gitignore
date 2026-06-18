@@ -53,6 +53,7 @@ data/
 *.swp
 .claude/
 .docs/superpowers/
+.serena/
 .codex-review/camoufox-download/
 CLAUDE.md
 .ace-tool/
